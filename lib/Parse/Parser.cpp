@@ -75,6 +75,9 @@ Parser::Parser(Preprocessor &pp, Sema &actions, bool skipFunctionBodies)
   PackHandler.reset(new PragmaPackHandler());
   PP.AddPragmaHandler(PackHandler.get());
     
+  ElementWiseHandler.reset(new PragmaElementWiseHandler());
+  PP.AddPragmaHandler(ElementWiseHandler.get());
+
   MSStructHandler.reset(new PragmaMSStructHandler());
   PP.AddPragmaHandler(MSStructHandler.get());
 
@@ -424,6 +427,8 @@ Parser::~Parser() {
   OptionsHandler.reset();
   PP.RemovePragmaHandler(PackHandler.get());
   PackHandler.reset();
+  PP.RemovePragmaHandler(ElementWiseHandler.get());
+  ElementWiseHandler.reset();
   PP.RemovePragmaHandler(MSStructHandler.get());
   MSStructHandler.reset();
   PP.RemovePragmaHandler(UnusedHandler.get());
@@ -619,6 +624,9 @@ Parser::ParseExternalDeclaration(ParsedAttributesWithRange &attrs,
     return DeclGroupPtrTy();
   case tok::annot_pragma_pack:
     HandlePragmaPack();
+    return DeclGroupPtrTy();
+  case tok::annot_pragma_elementWise:
+    HandlePragmaElementWise();
     return DeclGroupPtrTy();
   case tok::annot_pragma_msstruct:
     HandlePragmaMSStruct();

@@ -254,6 +254,8 @@ public:
   /// of 0 indicates default alignment.
   void *PackContext; // Really a "PragmaPackStack*"
 
+  unsigned int numElementWise;
+
   bool MSStructPragmaOn; // True when \#pragma ms_struct on
 
   /// VisContext - Manages the stack for \#pragma GCC visibility.
@@ -6591,6 +6593,8 @@ public:
                        SourceLocation PragmaLoc,
                        SourceLocation LParenLoc,
                        SourceLocation RParenLoc);
+
+  void ActOnPragmaElementWise();
 
   /// ActOnPragmaMSStruct - Called on well formed \#pragma ms_struct [on|off].
   void ActOnPragmaMSStruct(PragmaMSStructKind Kind);
