@@ -64,7 +64,6 @@ void Parser::HandlePragmaPack() {
 
 void Parser::HandlePragmaElementWise() {
   assert(Tok.is(tok::annot_pragma_elementWise));
-  llvm::outs() << "find elementWise\n";
   ConsumeToken();
   Actions.ActOnPragmaElementWise();
 }

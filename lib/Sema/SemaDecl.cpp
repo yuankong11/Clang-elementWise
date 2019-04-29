@@ -8908,6 +8908,13 @@ Decl *Sema::ActOnFinishFunctionBody(Decl *dcl, Stmt *Body,
         UndefinedButUsed.erase(FD);
     }
 
+    if(numElementWise) {
+      FD->setElementWise(true);
+      --numElementWise;
+    }
+    else
+      FD->setElementWise(false);
+
     // If the function implicitly returns zero (like 'main') or is naked,
     // don't complain about missing return statements.
     if (FD->hasImplicitReturnZero() || FD->hasAttr<NakedAttr>())

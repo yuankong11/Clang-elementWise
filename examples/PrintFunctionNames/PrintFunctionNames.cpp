@@ -24,10 +24,11 @@ namespace {
 class PrintFunctionsConsumer : public ASTConsumer {
 public:
   virtual bool HandleTopLevelDecl(DeclGroupRef DG) {
+	llvm::errs() << "One Decl" << endl;
     for (DeclGroupRef::iterator i = DG.begin(), e = DG.end(); i != e; ++i) {
       const Decl *D = *i;
-      if (const NamedDecl *ND = dyn_cast<NamedDecl>(D))
-        llvm::errs() << "top-level-decl: \"" << ND->getNameAsString() << "\"\n";
+      if (const FunctionDecl *FD = dyn_cast<FunctionDecl>(D)) 
+        llvm::errs() << "top-level-decl: \"" << FD->getNameAsString() << ":" << FD -> getAsCheckRule() << "\n" ;
     }
 
     return true;

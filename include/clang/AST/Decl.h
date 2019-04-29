@@ -1398,6 +1398,7 @@ private:
   unsigned SClass : 2;
   bool IsInline : 1;
   bool IsInlineSpecified : 1;
+  bool IsElementWise: 1;
   bool IsVirtualAsWritten : 1;
   bool IsPure : 1;
   bool HasInheritedPrototype : 1;
@@ -1809,6 +1810,13 @@ public:
   void setInlineSpecified(bool I) {
     IsInlineSpecified = I;
     IsInline = I;
+  }
+
+  bool isElementWise() const { return IsElementWise; }
+
+  void setElementWise(bool I) {
+    assert(doesThisDeclarationHaveABody());
+    IsElementWise = I;
   }
 
   /// Flag that this function is implicitly inline.
