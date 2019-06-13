@@ -6299,6 +6299,20 @@ Sema::CheckSingleAssignmentConstraints(QualType LHSType, ExprResult &RHS,
     return Compatible;
   }
 
+  if (this->numElementWise &&
+      ConstantArrayType::classof(LHSType.getTypePtr()) &&
+      ConstantArrayType::classof(RHS.get()->getType().getTypePtr())) {
+    QualType RHSType = RHS.get()->getType();
+    LHSType = Context.getCanonicalType(LHSType).getUnqualifiedType();
+    RHSType = Context.getCanonicalType(RHSType).getUnqualifiedType();
+    if (LHSType == RHSType) {
+      return Compatible;
+    }
+    else {
+      return Incompatible;
+    }
+  }
+
   // This check seems unnatural, however it is necessary to ensure the proper
   // conversion of functions/arrays. If the conversion were done for all
   // DeclExpr's (created by ActOnIdExpression), it would mess up the unary
@@ -7984,6 +7998,7 @@ static bool CheckForModifiableLvalue(Expr *E, SourceLocation Loc, Sema &S) {
     break;
   case Expr::MLV_ArrayType:
   case Expr::MLV_ArrayTemporary:
+    if (S.numElementWise) return false;
     Diag = diag::err_typecheck_array_not_modifiable_lvalue;
     NeedType = true;
     break;
